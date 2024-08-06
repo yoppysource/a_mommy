@@ -1,0 +1,96 @@
+{
+  "Freezed model": {
+    "prefix": "frz",
+    "body": [
+      "import 'package:freezed_annotation/freezed_annotation.dart';",
+      "part '${TM_FILENAME_BASE}.freezed.dart';",
+      "",
+      "@freezed",
+      "class ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g}} with _$${1} {",
+      "  factory ${1}({",
+      "    required ${2:String id},",
+      "  }) = _${1};",
+      "}"
+    ],
+    "description": "Freezed model"
+  },
+  "Freezed model Json": {
+    "prefix": "frzjs",
+    "body": [
+      "import 'package:freezed_annotation/freezed_annotation.dart';",
+      "part '${TM_FILENAME_BASE}.freezed.dart';",
+      "part '${TM_FILENAME_BASE}.g.dart';",
+      "",
+      "@freezed",
+      "class ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g}} with _$${1} {",
+      "  factory ${1}({",
+      "    required ${2:int id},",
+      "  }) = _${1};",
+      "",
+      "factory ${1}.fromJson(Map<String, dynamic> json) => ",
+      "_$${1}FromJson(json);",
+      "}"
+    ],
+    "description": "Freezed model with Json"
+  },
+  "Riverpod class": {
+    "prefix": "rivclass",
+    "body": [
+      "import 'package:riverpod_annotation/riverpod_annotation.dart';",
+      "part '${TM_FILENAME_BASE}.g.dart';",
+      "",
+      "@riverpod",
+      "class ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g}} extends _$${1} {",
+      "  @override",
+      "  FutureOr<void> build() {",
+      "  state = const AsyncData(null);",
+      "  }",
+      "}"
+    ],
+    "description": "Riverpod class"
+  },
+  "Riverpod Service": {
+    "prefix": "rivservice",
+    "body": [
+      "import 'package:riverpod_annotation/riverpod_annotation.dart';",
+      "part '${TM_FILENAME_BASE}.g.dart';",
+      "",
+      "class ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g}} {",
+      "  Future<void> init() {",
+      "  }",
+      "}",
+      "",
+      "@Riverpod(keepAlive: true)",
+      "Future<${1}>  ${1}(${1}Ref ref) {",
+      " return ${1}()",
+      "}"
+    ],
+    "description": "Riverpod class"
+  },
+  "value printer": {
+    "prefix": "vp",
+    "body": ["print('${1:VALUE} : ${${1}}');"],
+    "description": "value printer"
+  },
+  "Auto Route Screen": {
+    "prefix": "@autoRouteScreen",
+    "body": [
+      "import 'package:auto_route/auto_route.dart';",
+      "import 'package:flutter/material.dart';",
+      "import 'package:flutter_riverpod/flutter_riverpod.dart';",
+      "",
+      "@RoutePage()",
+      "class ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g}} extends ConsumerWidget {",
+      "  const ${1}({super.key});",
+      "",
+      " @override",
+      " Widget build(BuildContext context, WidgetRef ref) {",
+      "   return const Center(",
+      "     child: Text('${1}'),",
+      "   );",
+      " }",
+      "}"
+    ],
+    "description": "Freezed model with Json"
+  }
+}
