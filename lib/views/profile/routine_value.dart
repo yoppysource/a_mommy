@@ -1,5 +1,6 @@
 import 'package:amommy/models/routine_model.dart';
 import 'package:amommy/views/profile/user.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'routine_value.g.dart';
 
@@ -22,30 +23,29 @@ class RoutineValue extends _$RoutineValue {
       .where((element) => element.dayTime == DayTime.night)
       .toList(growable: false);
 
-  RoutineModel getRoutine(int index, DayTime dayTime) {
-    if (dayTime == DayTime.morning) {
-      return morningRoutineList[index];
-    } else if (dayTime == DayTime.afternoon) {
-      return afternoonRoutineList[index];
-    } else {
-      return nightRoutineList[index];
+  void onChangeRoutine(
+    RoutineModel routineModel,
+    String name,
+  ) {
+    int index = state.indexWhere((element) => element == routineModel);
+    if (index > -1) {
+      state[index].name = name;
+      state = [...state];
     }
   }
 
-  void onChangeRoutine(DayTime dayTime, int index, String name) {
-    getRoutine(index, dayTime).name = name;
-    state = [...state];
-  }
-
-  void onRemoveRoutine(int index) {
+  void onRemoveRoutine(RoutineModel routineModel) {
     final routines = state;
-    routines.removeAt(index);
-    state = [...routines];
+    int index = routines.indexWhere((element) => element == routineModel);
+    if (index > -1) {
+      routines.removeAt(index);
+      state = [...routines];
+    }
   }
 
   void onAddRoutine(DayTime dayTime) {
     final routines = state;
-    routines.add(RoutineModel(name: "", dayTime: DayTime.morning));
+    routines.add(RoutineModel(name: "", dayTime: dayTime));
     state = [...routines];
   }
 }

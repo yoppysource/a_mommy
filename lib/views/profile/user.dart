@@ -1,6 +1,7 @@
+import 'package:amommy/models/routine_model.dart';
 import 'package:amommy/models/user_model.dart';
 import 'package:amommy/services/hive_service.dart';
-import 'package:amommy/views/profile/hobby_value.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -54,8 +55,32 @@ class User extends _$User {
     state = state!.copyWith(livingArea: livingArea);
   }
 
+  void onJobChanged(String job) {
+    if (job.isEmpty) {
+      return;
+    }
+    state = state!.copyWith(job: job);
+  }
+
   Future<void> saveHobbies(List<String> hobbies) async {
     state = state!.copyWith(hobbies: hobbies);
+    return saveCurrentState();
+  }
+
+  void onAlarmTimeChanged(TimeOfDay? alarmTime) {
+    state = state!.copyWith(alarmTime: alarmTime);
+    saveCurrentState();
+  }
+
+  void onNeedAlarmChanged(bool needAlarm) {
+    state = state!.copyWith(needAlarm: needAlarm);
+    saveCurrentState();
+  }
+
+  Future<void> saveRoutines(List<RoutineModel> routines) async {
+    List<RoutineModel> filteredRoutines =
+        routines.where((element) => element.name.isNotEmpty).toList();
+    state = state!.copyWith(dailyRoutines: filteredRoutines);
     return saveCurrentState();
   }
 }

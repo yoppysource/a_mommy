@@ -1,5 +1,7 @@
+import 'package:amommy/models/routine_model.dart';
 import 'package:amommy/models/user_model.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -10,6 +12,9 @@ class HiveService {
     await Hive.initFlutter();
     Hive.registerAdapter(UserModelAdapter());
     Hive.registerAdapter(LanguageAdapter());
+    Hive.registerAdapter(RoutineModelAdapter());
+    Hive.registerAdapter(DayTimeAdapter());
+    Hive.registerAdapter(TimeOfDayAdapter());
 
     await Hive.openBox<UserModel>('user');
   }

@@ -1,7 +1,11 @@
+import 'package:amommy/models/routine_model.dart';
 import 'package:amommy/models/user_model.dart';
 import 'package:amommy/views/common/bottom_button.dart';
+import 'package:amommy/views/profile/alarm_input_view.dart';
 import 'package:amommy/views/profile/hobby_input_view.dart';
 import 'package:amommy/views/profile/hobby_value.dart';
+import 'package:amommy/views/profile/routine_input_view.dart';
+import 'package:amommy/views/profile/routine_value.dart';
 import 'package:amommy/views/profile/select_input_view.dart';
 import 'package:amommy/views/profile/text_input_view.dart';
 import 'package:amommy/views/profile/user.dart';
@@ -49,12 +53,18 @@ class _UserInputScreenState extends ConsumerState<UserInputScreen>
           "What is your hobby?",
           "Enter your hobby",
         ),
+        RoutineInputView(
+          user(ref)?.dailyRoutines ?? [],
+          "What is your daily routines?",
+          "Enter your routine",
+        ),
         TextInputView(
           user(ref)?.job?.toString() ?? "",
-          "Where are do for your work?",
+          "What are do for your work?",
           "Enter your job",
-          ref.watch(userProvider.notifier).onLivingAreaChanged,
+          ref.watch(userProvider.notifier).onJobChanged,
         ),
+        const AlarmInputView()
       ];
   @override
   void initState() {
@@ -81,6 +91,10 @@ class _UserInputScreenState extends ConsumerState<UserInputScreen>
             if (currentIndex == 4) {
               final List<String> hobbies = ref.read(hobbyValueProvider);
               await userNotifier.saveHobbies(hobbies);
+            } else if (currentIndex == 5) {
+              final List<RoutineModel> routines =
+                  ref.read(routineValueProvider);
+              await userNotifier.saveRoutines(routines);
             } else {
               await userNotifier.saveCurrentState();
             }

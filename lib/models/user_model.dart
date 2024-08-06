@@ -55,7 +55,7 @@ class UserModel extends HiveObject {
       dailyRoutines != null &&
       hobbies != null &&
       hobbies!.isNotEmpty &&
-      needAlarm != null;
+      (needAlarm == false || (needAlarm == true && alarmTime != null));
 
   UserModel copyWith({
     String? name,
