@@ -8,16 +8,13 @@ class ChatMessagesView extends ConsumerWidget {
     super.key,
     this.isFocused = false,
     required this.chats,
-    required this.scrollController,
   });
   final bool isFocused;
   final List<ChatMessageModel> chats;
-  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView.builder(
-        controller: scrollController,
         reverse: true,
         padding: const EdgeInsets.only(
           top: 120.0,

@@ -5,9 +5,7 @@ part 'local_notification_service.g.dart';
 
 class LocalNotificationService {
   late final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
-  static notificationTapBackground(NotificationResponse notificationResponse) {
-    print("bg:$notificationResponse");
-  }
+  static notificationTapBackground(NotificationResponse notificationResponse) {}
 
   Future<void> init() async {
     _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -17,7 +15,7 @@ class LocalNotificationService {
             AndroidFlutterLocalNotificationsPlugin>()!
         .requestNotificationsPermission();
 
-    // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+    // initialize the plugin. app_icon needs to be a added as a drawable resource to the Android head project
     AndroidInitializationSettings androidSettings =
         const AndroidInitializationSettings("@mipmap/ic_launcher");
     InitializationSettings initializationSettings = InitializationSettings(
@@ -25,10 +23,23 @@ class LocalNotificationService {
     );
     await _flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onDidReceiveNotificationResponse:
-            (NotificationResponse notificationResponse) async {
-      print("noti-------------$notificationResponse");
-      // ...
-    }, onDidReceiveBackgroundNotificationResponse: notificationTapBackground);
+            (NotificationResponse notificationResponse) async {},
+        onDidReceiveBackgroundNotificationResponse: notificationTapBackground);
+  }
+
+  // This DateTime is from user side, so it is already in local time
+  tz.TZDateTime _getLocalDateTime(DateTime date) {
+    Duration offSet = DateTime.now().timeZoneOffset;
+    DateTime local = date.add(-offSet);
+    return tz.TZDateTime(
+      tz.local,
+      local.year,
+      local.month,
+      local.day,
+      local.hour,
+      local.minute,
+      local.second,
+    );
   }
 
   Future<void> scheduleNotification(
@@ -38,7 +49,7 @@ class LocalNotificationService {
       0,
       'A Mommy',
       "Message from a mommy",
-      tz.TZDateTime.from(dateTime, tz.local),
+      _getLocalDateTime(dateTime),
       const NotificationDetails(
           android: AndroidNotificationDetails(
         'channel_id',

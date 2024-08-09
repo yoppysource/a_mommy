@@ -9,23 +9,16 @@ class SplashLoadingScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(gradient: Palette.gradient2),
-        child: const Center(
+        child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Image.asset(
-              //   Assets.logo,
-              //   width: 99,
-              //   height: 88,
-              //   fit: BoxFit.cover,
-              // ),
-              // Image.asset(
-
-              //   // Assets.logoTypo,
-              //   width: 237,
-              //   height: 56,
-              //   fit: BoxFit.cover,
-              // ),
+              Image.asset(
+                "assets/icon.png",
+                width: 99,
+                height: 88,
+                fit: BoxFit.cover,
+              ),
             ],
           ),
         ),

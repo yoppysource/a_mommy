@@ -24,8 +24,10 @@ class AlarmService {
     Schema(
       SchemaType.object,
       properties: {
-        'timeOfDay': Schema(SchemaType.string,
-            description: 'When is the time to set the alarm.' 'HH:MM format'),
+        'timeOfDay': Schema(
+          SchemaType.string,
+          description: 'When is the time to set the alarm.' 'HH:MM format',
+        ),
       },
       requiredProperties: ['timeOfDay'],
     ),
@@ -46,12 +48,8 @@ class AlarmService {
 
   Future<void> checkAndroidScheduleExactAlarmPermission() async {
     final status = await Permission.scheduleExactAlarm.status;
-    print('Schedule exact alarm permission: $status.');
     if (status.isDenied) {
-      print('Requesting schedule exact alarm permission...');
-      final res = await Permission.scheduleExactAlarm.request();
-      print(
-          'Schedule exact alarm permission ${res.isGranted ? '' : 'not'} granted.');
+      await Permission.scheduleExactAlarm.request();
     }
     if (await isAutoStartAvailable == false) {
       getAutoStartPermission();

@@ -17,18 +17,18 @@ class ScheduleCheckService {
   Stream<ScheduleModel> get scheduleStream => _scheduleController.stream;
 
   final setPlanTool = FunctionDeclaration(
-    'setPlan',
-    'set plan for today',
+    'notifyPlan',
+    'notify plan for today',
     Schema(
       SchemaType.object,
       properties: {
         'name': Schema(
           SchemaType.string,
-          description: 'The name of the schedule to set',
+          description: 'The name of plan to notify',
         ),
         'timeOfDay': Schema(
           SchemaType.string,
-          description: 'When is the time to do plan' 'HH:MM format',
+          description: 'When is the time to notify' 'HH:MM format',
         ),
       },
       requiredProperties: ['name', "timeOfDay"],
@@ -43,7 +43,12 @@ class ScheduleCheckService {
     List<String> time = timeOfDay.split(':');
     DateTime now = DateTime.now();
     DateTime plannedTime = DateTime(
-        now.year, now.month, now.day, int.parse(time[0]), int.parse(time[1]));
+      now.year,
+      now.month,
+      now.day,
+      int.parse(time[0]),
+      int.parse(time[1]),
+    );
 
     await _notificationService.scheduleNotification(
       plannedTime,

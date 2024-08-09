@@ -21,16 +21,13 @@ class MainChatScreen extends ConsumerStatefulWidget {
 class _MainChatScreenState extends ConsumerState<MainChatScreen>
     with ChatMessagesState, WidgetsBindingObserver {
   late final FocusNode _focusNode;
-  late final ScrollController _scrollController;
   StreamSubscription<AlarmSettings>? _subscription;
   AlarmSettings? settings;
   bool get isRinging => settings != null;
-  final double _keyboardHeight = 0;
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _scrollController = ScrollController();
     ref.read(scheduleCheckServiceProvider).checkSchedule();
     _focusNode = FocusNode()
       ..addListener(() {
@@ -51,7 +48,6 @@ class _MainChatScreenState extends ConsumerState<MainChatScreen>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _focusNode.dispose();
-    _scrollController.dispose();
     _subscription?.cancel();
     super.dispose();
   }
@@ -61,30 +57,6 @@ class _MainChatScreenState extends ConsumerState<MainChatScreen>
     if (state == AppLifecycleState.resumed) {
       ref.read(scheduleCheckServiceProvider).checkSchedule();
       ref.read(chatMessagesProvider.notifier).resetCount();
-    }
-  }
-
-  @override
-  void didChangeMetrics() {
-    super.didChangeMetrics();
-    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
-    // if (keyboardHeight != _keyboardHeight) {
-    //   setState(() {
-    //     _keyboardHeight = keyboardHeight;
-    //   });
-    //   if (_keyboardHeight > 100) {
-    //     _scrollToEnd();
-    //   }
-    // }
-  }
-
-  void _scrollToEnd() {
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent + _keyboardHeight,
-        duration: const Duration(milliseconds: 100),
-        curve: Curves.easeOut,
-      );
     }
   }
 
@@ -151,7 +123,6 @@ class _MainChatScreenState extends ConsumerState<MainChatScreen>
                 children: [
                   Expanded(
                     child: ChatMessagesView(
-                      scrollController: _scrollController,
                       isFocused: _focusNode.hasFocus,
                       chats: chatMessages(ref),
                     ),

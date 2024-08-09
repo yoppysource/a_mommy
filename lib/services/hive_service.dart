@@ -2,9 +2,7 @@ import 'package:amommy/models/chat_message_model.dart';
 import 'package:amommy/models/promise_model.dart';
 import 'package:amommy/models/schedule_model.dart';
 import 'package:amommy/models/user_model.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'hive_service.g.dart';

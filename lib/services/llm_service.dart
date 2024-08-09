@@ -59,29 +59,16 @@ class LLMService {
 
   String get role =>
       "You are a concerned, nagging mom chatting with you son with mobile phone.";
-  String get profileOfMe {
-    return "Here is my profile: I am ${me.age} years old and your son. My name is ${me.name}. I am a ${me.job} living in ${me.livingArea}.I have the following hobbies: ${me.hobbies}.";
-  }
+  String get profileOfMe =>
+      "Here is my profile: I am ${me.age} years old and your son. My name is ${me.name}. I am a ${me.job} living in ${me.livingArea}.I have the following hobbies: ${me.hobbies}.";
 
   String get circumstances =>
       "Now time is ${TimeOfDay.now().formattedString} and you are living faraway from son.";
 
-// bout your son’s well-being and often give him advice and instructions to help guide him in a better direction. Occasionally, .
-  // String get jsonPrompt => '''Response structure should be like this: {
-  //                             "$from": "What You Heard from audio",
-  //                             "$to": "Translation result in $to",
-  //                           }''';
-
-  // String buildPrompt() {
-  // String additionalPrompt =
-  //     "Response structure should be like this: {What you heard in $from}, {Translation in $to}";
-  // return (lastChats.isNotEmpty
-  //     ? "Also, consider the conversation context. Conversation is following:${lastChats.sublist(lastChats.length - 5 > 0 ? lastChats.length - 5 : 0).map((e) => e.message).join("\n")}"
-  //     : "");
-  // }
-
   Future<String?> getMessage(
-      List<ChatMessageModel> lastChats, String message) async {
+    List<ChatMessageModel> lastChats,
+    String message,
+  ) async {
     List<Content> contents =
         await Future.wait(lastChats.map((e) => e.toContent()));
 
@@ -111,7 +98,7 @@ class LLMService {
           'setMorningAlarm' => await _alarmService.setAlarmFromLLM(
               functionCall.args,
             ),
-          'setPlan' => await _scheduleCheckService.setPlanFromLLM(
+          'notifyPlan' => await _scheduleCheckService.setPlanFromLLM(
               functionCall.args,
             ),
           _ => throw UnimplementedError(
@@ -129,7 +116,6 @@ class LLMService {
         return text;
       }
     } catch (e) {
-      print(e.toString());
       return "Oops!! I forgot to turn off the gas stove. Let be back in a minute.";
     }
     return null;
