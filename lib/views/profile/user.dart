@@ -1,4 +1,4 @@
-import 'package:amommy/models/routine_model.dart';
+import 'package:amommy/models/promise_model.dart';
 import 'package:amommy/models/user_model.dart';
 import 'package:amommy/services/hive_service.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'user.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class User extends _$User {
   HiveService get hiveService => ref.watch(hiveServiceProvider).requireValue;
 
@@ -77,10 +77,10 @@ class User extends _$User {
     saveCurrentState();
   }
 
-  Future<void> saveRoutines(List<RoutineModel> routines) async {
-    List<RoutineModel> filteredRoutines =
+  Future<void> savePromises(List<PromiseModel> routines) async {
+    List<PromiseModel> filteredRoutines =
         routines.where((element) => element.name.isNotEmpty).toList();
-    state = state!.copyWith(dailyRoutines: filteredRoutines);
+    state = state!.copyWith(dailyPromises: filteredRoutines);
     return saveCurrentState();
   }
 }

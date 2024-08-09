@@ -1,5 +1,14 @@
+import 'dart:async';
+import 'package:alarm/model/alarm_settings.dart';
+import 'package:amommy/services/alarm_service.dart';
+import 'package:amommy/services/schedule_check_service.dart';
+import 'package:amommy/views/main/chat_messages.dart';
+import 'package:amommy/views/main/chat_messages_view.dart';
+import 'package:amommy/views/main/chat_text_field.dart';
+import 'package:amommy/views/profile/user_input_screen.dart';
+import 'package:amommy/views/theme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MainChatScreen extends ConsumerStatefulWidget {
@@ -9,13 +18,153 @@ class MainChatScreen extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _MainChatScreenState();
 }
 
-class _MainChatScreenState extends ConsumerState<MainChatScreen> {
+class _MainChatScreenState extends ConsumerState<MainChatScreen>
+    with ChatMessagesState, WidgetsBindingObserver {
+  late final FocusNode _focusNode;
+  late final ScrollController _scrollController;
+  StreamSubscription<AlarmSettings>? _subscription;
+  AlarmSettings? settings;
+  bool get isRinging => settings != null;
+  final double _keyboardHeight = 0;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _scrollController = ScrollController();
+    ref.read(scheduleCheckServiceProvider).checkSchedule();
+    _focusNode = FocusNode()
+      ..addListener(() {
+        setState(() {});
+      });
+    _subscription = ref
+        .read(alarmServiceProvider)
+        .requireValue
+        .ringStream
+        .listen((setting) {
+      setState(() {
+        settings = setting;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _focusNode.dispose();
+    _scrollController.dispose();
+    _subscription?.cancel();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      ref.read(scheduleCheckServiceProvider).checkSchedule();
+      ref.read(chatMessagesProvider.notifier).resetCount();
+    }
+  }
+
+  @override
+  void didChangeMetrics() {
+    super.didChangeMetrics();
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    // if (keyboardHeight != _keyboardHeight) {
+    //   setState(() {
+    //     _keyboardHeight = keyboardHeight;
+    //   });
+    //   if (_keyboardHeight > 100) {
+    //     _scrollToEnd();
+    //   }
+    // }
+  }
+
+  void _scrollToEnd() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent + _keyboardHeight,
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeOut,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text("Main Chat Screen"),
+    final notifier = ref.watch(chatMessagesProvider.notifier);
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      extendBody: true,
+      appBar: AppBar(
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        title: const Text(
+          'A Mommy',
+          style: TextPreset.subTitle2,
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const UserInputScreen(),
+                ),
+              );
+            },
+            icon: const Icon(CupertinoIcons.settings),
+          ),
+        ],
+        centerTitle: true,
       ),
+      body: isRinging
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Wake up!"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        await ref
+                            .read(alarmServiceProvider)
+                            .requireValue
+                            .stopById(settings!.id);
+                        await notifier.notifyWakeUp(
+                          TimeOfDay.fromDateTime(
+                            settings!.dateTime.toLocal(),
+                          ),
+                          TimeOfDay.now(),
+                        );
+                        setState(() {
+                          settings = null;
+                        });
+                      },
+                      child: const Text("Stop"),
+                    ),
+                  ],
+                )
+              ],
+            )
+          : GestureDetector(
+              onTap: _focusNode.unfocus,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ChatMessagesView(
+                      scrollController: _scrollController,
+                      isFocused: _focusNode.hasFocus,
+                      chats: chatMessages(ref),
+                    ),
+                  ),
+                  ChatTextField(
+                    focusNode: _focusNode,
+                    onSend: (message, images) async {
+                      await notifier.sendMessage(message, images);
+                    },
+                  ),
+                ],
+              ),
+            ),
     );
   }
 }

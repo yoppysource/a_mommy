@@ -1,57 +1,57 @@
-import 'package:amommy/models/routine_model.dart';
+import 'package:amommy/models/promise_model.dart';
 import 'package:amommy/views/common/bottom_button.dart';
 import 'package:amommy/views/common/delay_label.dart';
-import 'package:amommy/views/profile/routine_value.dart';
+import 'package:amommy/views/profile/promise_value.dart';
 import 'package:amommy/views/profile/text_input_item.dart';
 import 'package:amommy/views/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RoutineInputView extends ConsumerStatefulWidget {
-  const RoutineInputView(this.initialValue, this.title, this.hintText,
+class PromiseInputView extends ConsumerStatefulWidget {
+  const PromiseInputView(this.initialValue, this.title, this.hintText,
       {super.key});
 
   final String title;
   final String hintText;
-  final List<RoutineModel> initialValue;
+  final List<PromiseModel> initialValue;
 
   @override
-  ConsumerState<RoutineInputView> createState() => _RoutineInputViewState();
+  ConsumerState<PromiseInputView> createState() => _PromiseInputViewState();
 }
 
-class _RoutineInputViewState extends ConsumerState<RoutineInputView> {
+class _PromiseInputViewState extends ConsumerState<PromiseInputView> {
   @override
   Widget build(BuildContext context) {
-    final routine = ref.watch(routineValueProvider);
-    final routineNotifier = ref.watch(routineValueProvider.notifier);
+    final promises = ref.watch(promiseValueProvider);
+    final promiseNotifier = ref.watch(promiseValueProvider.notifier);
     return DelayLabel(
       title: widget.title,
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text("Morning Routine", style: TextPreset.subTitle3),
+            const Text("Morning Promise", style: TextPreset.subTitle3),
             const SizedBox(height: 8.0),
             ListView.separated(
               shrinkWrap: true,
-              itemCount: routineNotifier.morningRoutineList.length,
+              itemCount: promiseNotifier.morningPromiseList.length,
               itemBuilder: (context, index) {
-                final routine = routineNotifier.morningRoutineList[index];
+                final promise = promiseNotifier.morningPromiseList[index];
                 return TextInputItem(
-                  text: routine.name,
+                  text: promise.name,
                   hintText: widget.hintText,
                   onXIconPressed: () =>
-                      routineNotifier.onRemoveRoutine(routine),
+                      promiseNotifier.onRemovePromise(promise),
                   onChanged: (value) =>
-                      routineNotifier.onChangeRoutine(routine, value),
+                      promiseNotifier.onChangePromise(promise, value),
                 );
               },
               separatorBuilder: (_, __) => const SizedBox(height: 16.0),
             ),
             const SizedBox(height: 12.0),
             InkWell(
-              onTap: () => routineNotifier.onAddRoutine(DayTime.morning),
+              onTap: () => promiseNotifier.onAddPromise(DayTime.morning),
               borderRadius: const BorderRadius.all(Radius.circular(20.0)),
               child: const CircleAvatar(
                 radius: 20.0,
@@ -64,27 +64,27 @@ class _RoutineInputViewState extends ConsumerState<RoutineInputView> {
               ),
             ),
             const SizedBox(height: 24.0),
-            const Text("Afternoon Routine", style: TextPreset.subTitle3),
+            const Text("Afternoon Promise", style: TextPreset.subTitle3),
             const SizedBox(height: 8.0),
             ListView.separated(
               shrinkWrap: true,
-              itemCount: routineNotifier.afternoonRoutineList.length,
+              itemCount: promiseNotifier.afternoonPromiseList.length,
               itemBuilder: (context, index) {
-                final routine = routineNotifier.afternoonRoutineList[index];
+                final promise = promiseNotifier.afternoonPromiseList[index];
                 return TextInputItem(
-                  text: routine.name,
+                  text: promise.name,
                   hintText: widget.hintText,
                   onXIconPressed: () =>
-                      routineNotifier.onRemoveRoutine(routine),
+                      promiseNotifier.onRemovePromise(promise),
                   onChanged: (value) =>
-                      routineNotifier.onChangeRoutine(routine, value),
+                      promiseNotifier.onChangePromise(promise, value),
                 );
               },
               separatorBuilder: (_, __) => const SizedBox(height: 16.0),
             ),
             const SizedBox(height: 12.0),
             InkWell(
-              onTap: () => routineNotifier.onAddRoutine(DayTime.afternoon),
+              onTap: () => promiseNotifier.onAddPromise(DayTime.afternoon),
               borderRadius: const BorderRadius.all(Radius.circular(20.0)),
               child: const CircleAvatar(
                 radius: 20.0,
@@ -97,27 +97,27 @@ class _RoutineInputViewState extends ConsumerState<RoutineInputView> {
               ),
             ),
             const SizedBox(height: 24.0),
-            const Text("Night Routine", style: TextPreset.subTitle3),
+            const Text("Night Promise", style: TextPreset.subTitle3),
             const SizedBox(height: 8.0),
             ListView.separated(
               shrinkWrap: true,
-              itemCount: routineNotifier.nightRoutineList.length,
+              itemCount: promiseNotifier.nightPromiseList.length,
               itemBuilder: (context, index) {
-                final routine = routineNotifier.nightRoutineList[index];
+                final promise = promiseNotifier.nightPromiseList[index];
                 return TextInputItem(
-                  text: routine.name,
+                  text: promise.name,
                   hintText: widget.hintText,
                   onXIconPressed: () =>
-                      routineNotifier.onRemoveRoutine(routine),
+                      promiseNotifier.onRemovePromise(promise),
                   onChanged: (value) =>
-                      routineNotifier.onChangeRoutine(routine, value),
+                      promiseNotifier.onChangePromise(promise, value),
                 );
               },
               separatorBuilder: (_, __) => const SizedBox(height: 16.0),
             ),
             const SizedBox(height: 12.0),
             InkWell(
-              onTap: () => routineNotifier.onAddRoutine(DayTime.night),
+              onTap: () => promiseNotifier.onAddPromise(DayTime.night),
               borderRadius: const BorderRadius.all(Radius.circular(20.0)),
               child: const CircleAvatar(
                 radius: 20.0,

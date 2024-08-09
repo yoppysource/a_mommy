@@ -1,4 +1,4 @@
-import 'package:amommy/models/outlined_activation_button.dart';
+import 'package:amommy/views/common/outlined_activation_button.dart';
 import 'package:amommy/views/common/delay_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

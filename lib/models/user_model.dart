@@ -1,4 +1,4 @@
-import 'package:amommy/models/routine_model.dart';
+import 'package:amommy/models/promise_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -14,6 +14,7 @@ enum Language {
 
 @HiveType(typeId: 0)
 class UserModel extends HiveObject {
+  static const String boxName = 'user';
   @HiveField(0)
   String? name;
   @HiveField(1)
@@ -27,7 +28,7 @@ class UserModel extends HiveObject {
   @HiveField(5)
   String? job;
   @HiveField(6)
-  List<RoutineModel>? dailyRoutines;
+  List<PromiseModel>? dailyPromises;
   @HiveField(7)
   TimeOfDay? alarmTime;
   @HiveField(8)
@@ -40,7 +41,7 @@ class UserModel extends HiveObject {
     this.livingArea,
     this.hobbies,
     this.job,
-    this.dailyRoutines,
+    this.dailyPromises,
     this.alarmTime,
     this.needAlarm,
   });
@@ -52,7 +53,7 @@ class UserModel extends HiveObject {
       livingArea != null &&
       hobbies != null &&
       job != null &&
-      dailyRoutines != null &&
+      dailyPromises != null &&
       hobbies != null &&
       hobbies!.isNotEmpty &&
       (needAlarm == false || (needAlarm == true && alarmTime != null));
@@ -64,7 +65,7 @@ class UserModel extends HiveObject {
     String? livingArea,
     List<String>? hobbies,
     String? job,
-    List<RoutineModel>? dailyRoutines,
+    List<PromiseModel>? dailyPromises,
     TimeOfDay? alarmTime,
     bool? needAlarm,
   }) {
@@ -75,7 +76,7 @@ class UserModel extends HiveObject {
       livingArea: livingArea ?? this.livingArea,
       hobbies: hobbies ?? this.hobbies,
       job: job ?? this.job,
-      dailyRoutines: dailyRoutines ?? this.dailyRoutines,
+      dailyPromises: dailyPromises ?? this.dailyPromises,
       alarmTime: alarmTime ?? this.alarmTime,
       needAlarm: needAlarm ?? this.needAlarm,
     );

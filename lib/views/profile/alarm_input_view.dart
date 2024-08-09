@@ -1,4 +1,4 @@
-import 'package:amommy/models/outlined_activation_button.dart';
+import 'package:amommy/views/common/outlined_activation_button.dart';
 import 'package:amommy/views/common/delay_label.dart';
 import 'package:amommy/views/profile/user.dart';
 import 'package:amommy/views/theme.dart';

@@ -5,6 +5,8 @@ part 'schedule_model.g.dart';
 
 @HiveType(typeId: 4)
 class ScheduleModel extends HiveObject {
+  static const String boxName = 'schedule';
+
   @HiveField(0)
   String name;
   @HiveField(1)
@@ -12,14 +14,11 @@ class ScheduleModel extends HiveObject {
   @HiveField(2)
   bool isNotified;
   @HiveField(3)
-  bool isDone;
-  @HiveField(4)
   String? feeling;
 
   ScheduleModel({
     required this.name,
     required this.plannedTime,
     this.isNotified = false,
-    this.isDone = false,
   });
 }

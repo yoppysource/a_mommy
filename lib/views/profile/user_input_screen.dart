@@ -1,11 +1,11 @@
-import 'package:amommy/models/routine_model.dart';
+import 'package:amommy/models/promise_model.dart';
 import 'package:amommy/models/user_model.dart';
 import 'package:amommy/views/common/bottom_button.dart';
 import 'package:amommy/views/profile/alarm_input_view.dart';
 import 'package:amommy/views/profile/hobby_input_view.dart';
 import 'package:amommy/views/profile/hobby_value.dart';
 import 'package:amommy/views/profile/routine_input_view.dart';
-import 'package:amommy/views/profile/routine_value.dart';
+import 'package:amommy/views/profile/promise_value.dart';
 import 'package:amommy/views/profile/select_input_view.dart';
 import 'package:amommy/views/profile/text_input_view.dart';
 import 'package:amommy/views/profile/user.dart';
@@ -53,10 +53,10 @@ class _UserInputScreenState extends ConsumerState<UserInputScreen>
           "What is your hobby?",
           "Enter your hobby",
         ),
-        RoutineInputView(
-          user(ref)?.dailyRoutines ?? [],
-          "What is your daily routines?",
-          "Enter your routine",
+        PromiseInputView(
+          user(ref)?.dailyPromises ?? [],
+          "What are your promises not to do or to do with mom?",
+          "Enter your promises",
         ),
         TextInputView(
           user(ref)?.job?.toString() ?? "",
@@ -92,9 +92,9 @@ class _UserInputScreenState extends ConsumerState<UserInputScreen>
               final List<String> hobbies = ref.read(hobbyValueProvider);
               await userNotifier.saveHobbies(hobbies);
             } else if (currentIndex == 5) {
-              final List<RoutineModel> routines =
-                  ref.read(routineValueProvider);
-              await userNotifier.saveRoutines(routines);
+              final List<PromiseModel> promises =
+                  ref.read(promiseValueProvider);
+              await userNotifier.savePromises(promises);
             } else {
               await userNotifier.saveCurrentState();
             }
@@ -103,6 +103,10 @@ class _UserInputScreenState extends ConsumerState<UserInputScreen>
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeInOut,
               );
+            } else {
+              if (Navigator.canPop(context)) {
+                Navigator.of(context).pop();
+              }
             }
           }),
       body: SafeArea(
