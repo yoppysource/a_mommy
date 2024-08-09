@@ -38,8 +38,8 @@ class AlarmService {
     String timeOfDay = arguments['timeOfDay'] as String;
     List<String> time = timeOfDay.split(':');
     DateTime now = DateTime.now();
-    DateTime alarmTime = DateTime(
-        now.year, now.month, now.day, int.parse(time[0]), int.parse(time[1]));
+    DateTime alarmTime = DateTime(now.year, now.month, now.day + 1,
+        int.parse(time[0]), int.parse(time[1]));
 
     await setAlarm(alarmTime);
 

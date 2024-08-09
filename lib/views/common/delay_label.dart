@@ -17,8 +17,8 @@ class DelayLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: ListView(
+        shrinkWrap: true,
         children: [
           DelayedReveal(
             delay: const Duration(milliseconds: 300),
@@ -39,11 +39,9 @@ class DelayLabel extends StatelessWidget {
             ),
           },
           const SizedBox(height: 24.0),
-          Flexible(
-            child: DelayedReveal(
-              delay: Duration(milliseconds: subTitle != null ? 900 : 600),
-              child: SingleChildScrollView(child: child),
-            ),
+          DelayedReveal(
+            delay: Duration(milliseconds: subTitle != null ? 900 : 600),
+            child: child,
           ),
         ],
       ),

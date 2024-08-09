@@ -27,111 +27,106 @@ class _PromiseInputViewState extends ConsumerState<PromiseInputView> {
     final promiseNotifier = ref.watch(promiseValueProvider.notifier);
     return DelayLabel(
       title: widget.title,
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text("Morning Promise", style: TextPreset.subTitle3),
-            const SizedBox(height: 8.0),
-            ListView.separated(
-              shrinkWrap: true,
-              itemCount: promiseNotifier.morningPromiseList.length,
-              itemBuilder: (context, index) {
-                final promise = promiseNotifier.morningPromiseList[index];
-                return TextInputItem(
-                  text: promise.name,
-                  hintText: widget.hintText,
-                  onXIconPressed: () =>
-                      promiseNotifier.onRemovePromise(promise),
-                  onChanged: (value) =>
-                      promiseNotifier.onChangePromise(promise, value),
-                );
-              },
-              separatorBuilder: (_, __) => const SizedBox(height: 16.0),
-            ),
-            const SizedBox(height: 12.0),
-            InkWell(
-              onTap: () => promiseNotifier.onAddPromise(DayTime.morning),
-              borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-              child: const CircleAvatar(
-                radius: 20.0,
-                backgroundColor: Palette.primary1,
-                child: Icon(
-                  CupertinoIcons.add,
-                  size: 28.0,
-                  color: Palette.white,
-                ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Text("Morning Promise", style: TextPreset.subTitle3),
+          const SizedBox(height: 8.0),
+          ListView.separated(
+            shrinkWrap: true,
+            itemCount: promiseNotifier.morningPromiseList.length,
+            itemBuilder: (context, index) {
+              final promise = promiseNotifier.morningPromiseList[index];
+              return TextInputItem(
+                text: promise.name,
+                hintText: widget.hintText,
+                onXIconPressed: () => promiseNotifier.onRemovePromise(promise),
+                onChanged: (value) =>
+                    promiseNotifier.onChangePromise(promise, value),
+              );
+            },
+            separatorBuilder: (_, __) => const SizedBox(height: 16.0),
+          ),
+          const SizedBox(height: 12.0),
+          InkWell(
+            onTap: () => promiseNotifier.onAddPromise(DayTime.morning),
+            borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+            child: const CircleAvatar(
+              radius: 20.0,
+              backgroundColor: Palette.primary1,
+              child: Icon(
+                CupertinoIcons.add,
+                size: 28.0,
+                color: Palette.white,
               ),
             ),
-            const SizedBox(height: 24.0),
-            const Text("Afternoon Promise", style: TextPreset.subTitle3),
-            const SizedBox(height: 8.0),
-            ListView.separated(
-              shrinkWrap: true,
-              itemCount: promiseNotifier.afternoonPromiseList.length,
-              itemBuilder: (context, index) {
-                final promise = promiseNotifier.afternoonPromiseList[index];
-                return TextInputItem(
-                  text: promise.name,
-                  hintText: widget.hintText,
-                  onXIconPressed: () =>
-                      promiseNotifier.onRemovePromise(promise),
-                  onChanged: (value) =>
-                      promiseNotifier.onChangePromise(promise, value),
-                );
-              },
-              separatorBuilder: (_, __) => const SizedBox(height: 16.0),
-            ),
-            const SizedBox(height: 12.0),
-            InkWell(
-              onTap: () => promiseNotifier.onAddPromise(DayTime.afternoon),
-              borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-              child: const CircleAvatar(
-                radius: 20.0,
-                backgroundColor: Palette.primary1,
-                child: Icon(
-                  CupertinoIcons.add,
-                  size: 28.0,
-                  color: Palette.white,
-                ),
+          ),
+          const SizedBox(height: 24.0),
+          const Text("Afternoon Promise", style: TextPreset.subTitle3),
+          const SizedBox(height: 8.0),
+          ListView.separated(
+            shrinkWrap: true,
+            itemCount: promiseNotifier.afternoonPromiseList.length,
+            itemBuilder: (context, index) {
+              final promise = promiseNotifier.afternoonPromiseList[index];
+              return TextInputItem(
+                text: promise.name,
+                hintText: widget.hintText,
+                onXIconPressed: () => promiseNotifier.onRemovePromise(promise),
+                onChanged: (value) =>
+                    promiseNotifier.onChangePromise(promise, value),
+              );
+            },
+            separatorBuilder: (_, __) => const SizedBox(height: 16.0),
+          ),
+          const SizedBox(height: 12.0),
+          InkWell(
+            onTap: () => promiseNotifier.onAddPromise(DayTime.afternoon),
+            borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+            child: const CircleAvatar(
+              radius: 20.0,
+              backgroundColor: Palette.primary1,
+              child: Icon(
+                CupertinoIcons.add,
+                size: 28.0,
+                color: Palette.white,
               ),
             ),
-            const SizedBox(height: 24.0),
-            const Text("Night Promise", style: TextPreset.subTitle3),
-            const SizedBox(height: 8.0),
-            ListView.separated(
-              shrinkWrap: true,
-              itemCount: promiseNotifier.nightPromiseList.length,
-              itemBuilder: (context, index) {
-                final promise = promiseNotifier.nightPromiseList[index];
-                return TextInputItem(
-                  text: promise.name,
-                  hintText: widget.hintText,
-                  onXIconPressed: () =>
-                      promiseNotifier.onRemovePromise(promise),
-                  onChanged: (value) =>
-                      promiseNotifier.onChangePromise(promise, value),
-                );
-              },
-              separatorBuilder: (_, __) => const SizedBox(height: 16.0),
-            ),
-            const SizedBox(height: 12.0),
-            InkWell(
-              onTap: () => promiseNotifier.onAddPromise(DayTime.night),
-              borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-              child: const CircleAvatar(
-                radius: 20.0,
-                backgroundColor: Palette.primary1,
-                child: Icon(
-                  CupertinoIcons.add,
-                  size: 28.0,
-                  color: Palette.white,
-                ),
+          ),
+          const SizedBox(height: 24.0),
+          const Text("Night Promise", style: TextPreset.subTitle3),
+          const SizedBox(height: 8.0),
+          ListView.separated(
+            shrinkWrap: true,
+            itemCount: promiseNotifier.nightPromiseList.length,
+            itemBuilder: (context, index) {
+              final promise = promiseNotifier.nightPromiseList[index];
+              return TextInputItem(
+                text: promise.name,
+                hintText: widget.hintText,
+                onXIconPressed: () => promiseNotifier.onRemovePromise(promise),
+                onChanged: (value) =>
+                    promiseNotifier.onChangePromise(promise, value),
+              );
+            },
+            separatorBuilder: (_, __) => const SizedBox(height: 16.0),
+          ),
+          const SizedBox(height: 12.0),
+          InkWell(
+            onTap: () => promiseNotifier.onAddPromise(DayTime.night),
+            borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+            child: const CircleAvatar(
+              radius: 20.0,
+              backgroundColor: Palette.primary1,
+              child: Icon(
+                CupertinoIcons.add,
+                size: 28.0,
+                color: Palette.white,
               ),
             ),
-            SizedBox(height: BottomButton.height),
-          ],
-        ),
+          ),
+          SizedBox(height: BottomButton.height),
+        ],
       ),
     );
   }

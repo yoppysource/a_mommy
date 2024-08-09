@@ -18,7 +18,7 @@ class LLMService {
   ) {
     String apiKey = dotenv.env['API_KEY']!;
     model = GenerativeModel(
-      model: "gemini-1.5-flash-latest",
+      model: "gemini-1.5-pro-latest",
       apiKey: apiKey,
       tools: [
         Tool(functionDeclarations: [
@@ -75,7 +75,7 @@ class LLMService {
     final chat = model.startChat(
       history: [
         Content('user', [TextPart(role + profileOfMe + circumstances)]),
-        ...contents,
+        ...contents.reversed,
       ],
     );
     for (final history in chat.history) {

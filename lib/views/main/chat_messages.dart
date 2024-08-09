@@ -135,6 +135,11 @@ class ChatMessages extends _$ChatMessages {
     _onMomMessage(momMessage);
     isAboutPromise = true;
   }
+
+  Future<void> clear() async {
+    await hiveService.chatMessageBox.deleteAll(hiveService.chatMessageBox.keys);
+    state = [];
+  }
 }
 
 mixin class ChatMessagesState {

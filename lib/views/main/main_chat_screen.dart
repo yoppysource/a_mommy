@@ -76,13 +76,19 @@ class _MainChatScreenState extends ConsumerState<MainChatScreen>
         actions: [
           IconButton(
             onPressed: () {
+              ref.read(chatMessagesProvider.notifier).clear();
+            },
+            icon: const Icon(CupertinoIcons.delete),
+          ),
+          IconButton(
+            onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => const UserInputScreen(),
                 ),
               );
             },
-            icon: const Icon(CupertinoIcons.settings),
+            icon: const Icon(CupertinoIcons.profile_circled),
           ),
         ],
         centerTitle: true,
