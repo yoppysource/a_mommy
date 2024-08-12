@@ -30,20 +30,13 @@ class ChatMessagesView extends ConsumerWidget {
           final currentMessageIsMe = chatMessage.isMe;
           final nextMessageUserIsMe = nextChatMessage?.isMe;
           final nextUserIsSame = currentMessageIsMe == nextMessageUserIsMe;
-
           if (nextUserIsSame) {
             return MessageBubble.next(
-              isMe: chatMessage.isMe,
-              message: chatMessage.message,
-              createdAt: chatMessage.created,
-              imagePath: chatMessage.imagePath,
+              chatMessage: chatMessage,
             );
           } else {
             return MessageBubble.first(
-              isMe: chatMessage.isMe,
-              message: chatMessage.message,
-              createdAt: chatMessage.created,
-              imagePath: chatMessage.imagePath,
+              chatMessage: chatMessage,
             );
           }
         });

@@ -38,8 +38,13 @@ class AlarmService {
     String timeOfDay = arguments['timeOfDay'] as String;
     List<String> time = timeOfDay.split(':');
     DateTime now = DateTime.now();
-    DateTime alarmTime = DateTime(now.year, now.month, now.day + 1,
-        int.parse(time[0]), int.parse(time[1]));
+    DateTime alarmTime = DateTime(
+      now.year,
+      now.month,
+      now.day + 1,
+      int.parse(time[0]),
+      int.parse(time[1]),
+    );
 
     await setAlarm(alarmTime);
 
@@ -73,9 +78,8 @@ class AlarmService {
 
   Future<void> setAlarm(DateTime dateTime) async {
     // If you set an alarm for the same dateTime as an existing one, the new alarm will replace the existing one.
-    await stop();
     final alarmSettings = AlarmSettings(
-      id: 1,
+      id: dateTime.day,
       dateTime: dateTime,
       assetAudioPath: 'assets/alarm.mp3',
       loopAudio: true,

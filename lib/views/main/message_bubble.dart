@@ -1,26 +1,23 @@
 import 'dart:io';
 
+import 'package:amommy/models/chat_message_model.dart';
+import 'package:amommy/views/main/chat_messages.dart';
 import 'package:amommy/views/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MessageBubble extends StatelessWidget {
+class MessageBubble extends ConsumerWidget {
   const MessageBubble.first({
     super.key,
-    required this.isMe,
-    required this.createdAt,
-    this.message,
-    this.imagePath,
+    required this.chatMessage,
   }) : isFirstInSequence = true;
 
   const MessageBubble.next({
     super.key,
-    required this.isMe,
-    required this.createdAt,
-    this.imagePath,
-    this.message,
+    required this.chatMessage,
   }) : isFirstInSequence = false;
 
   String formatDateTime(DateTime dateTime) {
@@ -41,16 +38,14 @@ class MessageBubble extends StatelessWidget {
     }
   }
 
-  final DateTime createdAt;
+  final ChatMessageModel chatMessage;
   final bool isFirstInSequence;
-  final bool isMe;
-  final String? message;
-  final String? imagePath;
 
   final _textRadius = 300.0;
   final _imageRadius = 14.0;
 
-  double get _radius => imagePath != null ? _imageRadius : _textRadius;
+  double get _radius =>
+      chatMessage.imagePath != null ? _imageRadius : _textRadius;
 
   BorderRadius get rightBorder => BorderRadius.only(
         topLeft: Radius.circular(_radius),
@@ -67,46 +62,57 @@ class MessageBubble extends StatelessWidget {
       );
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Align(
-      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+      alignment:
+          chatMessage.isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Column(
-        crossAxisAlignment:
-            isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment: chatMessage.isMe
+            ? CrossAxisAlignment.end
+            : CrossAxisAlignment.start,
         children: [
-          imagePath != null
-              ? InkWell(
-                  onTap: () {},
+          chatMessage.imagePath != null
+              ? GestureDetector(
+                  onLongPress: () => ref
+                      .read(chatMessagesProvider.notifier)
+                      .deleteChat(chatMessage),
                   child: ClipRRect(
-                    borderRadius: isMe ? rightBorder : leftBorder,
+                    borderRadius: chatMessage.isMe ? rightBorder : leftBorder,
                     child: Image.file(
-                      File(imagePath!),
+                      File(chatMessage.imagePath!),
                       width: 180,
                       height: 180,
                       fit: BoxFit.cover,
                     ),
                   ),
                 )
-              : Container(
-                  decoration: BoxDecoration(
-                    color: isMe ? Palette.primary3 : Palette.gray2,
-                    borderRadius: isMe ? rightBorder : leftBorder,
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 12,
-                    horizontal: 16,
-                  ),
-                  child: Linkify(
-                    onOpen: (link) => launchUrl(Uri.parse(link.url)),
-                    text: message!,
-                    style: TextPreset.body2
-                        .copyWith(color: isMe ? Palette.white : Palette.gray8),
-                    softWrap: true,
+              : GestureDetector(
+                  onLongPress: () => ref
+                      .read(chatMessagesProvider.notifier)
+                      .deleteChat(chatMessage),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color:
+                          chatMessage.isMe ? Palette.primary3 : Palette.gray2,
+                      borderRadius: chatMessage.isMe ? rightBorder : leftBorder,
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 16,
+                    ),
+                    child: Linkify(
+                      onOpen: (link) => launchUrl(Uri.parse(link.url)),
+                      text: chatMessage.message!,
+                      style: TextPreset.body2.copyWith(
+                          color:
+                              chatMessage.isMe ? Palette.white : Palette.gray8),
+                      softWrap: true,
+                    ),
                   ),
                 ),
           const SizedBox(height: 4.0),
           Text(
-            formatDateTime(createdAt),
+            formatDateTime(chatMessage.created),
             style: TextPreset.caption.copyWith(color: Palette.gray6),
           ),
           const SizedBox(height: 8.0),

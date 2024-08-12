@@ -85,7 +85,7 @@ class _UserInputScreenState extends ConsumerState<UserInputScreen>
     return Scaffold(
       backgroundColor: Colors.white,
       bottomSheet: BottomButton(
-          text: "다음",
+          text: "Next",
           onPressed: () async {
             final userNotifier = ref.read(userProvider.notifier);
             if (currentIndex == 4) {

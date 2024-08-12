@@ -70,7 +70,15 @@ class LLMService {
     String message,
   ) async {
     List<Content> contents =
-        await Future.wait(lastChats.map((e) => e.toContent()));
+        (await Future.wait(lastChats.map((e) => e.toContent())));
+
+    if (contents.length > 10) {
+      for (int i = 9; i < contents.length; i++) {
+        if (contents[i].parts.first is DataPart) {
+          contents.removeAt(i);
+        }
+      }
+    }
 
     final chat = model.startChat(
       history: [

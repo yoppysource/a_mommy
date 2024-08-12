@@ -18,7 +18,7 @@ class ChatMessages extends _$ChatMessages {
   PromiseCheckService get promiseCheckService =>
       ref.watch(promiseCheckServiceProvider).requireValue;
   List<ChatMessageModel> get lastChats =>
-      state.length > 20 ? state.sublist(state.length - 20) : state;
+      state.length > 20 ? state.sublist(0, 20) : state;
   StreamSubscription? _scheduleSubscription;
   int messageCountForThisSession = 0;
   bool isAboutPromise = false;
@@ -139,6 +139,11 @@ class ChatMessages extends _$ChatMessages {
   Future<void> clear() async {
     await hiveService.chatMessageBox.deleteAll(hiveService.chatMessageBox.keys);
     state = [];
+  }
+
+  Future<void> deleteChat(ChatMessageModel chatMessage) async {
+    await chatMessage.delete();
+    state = state.where((element) => element != chatMessage).toList();
   }
 }
 

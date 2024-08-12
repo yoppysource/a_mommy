@@ -12,13 +12,16 @@ class PromiseCheckService {
   List<PromiseModel> get promises => _hiveService.getPromises();
 
   PromiseModel? getUnCheckedPromises() {
+    DateTime now = DateTime.now();
     List<PromiseModel> unCheckedPromise = promises
         .where(
           (promise) =>
-              promise.checkedAt!.isBefore(DateTime.now()) &&
+              promise.checkedAt!.isBefore(now) &&
+              promise.checkedAt!.isSameDay(now) &&
               promise.isDone == false,
         )
         .toList();
+
     if (unCheckedPromise.isNotEmpty) {
       return unCheckedPromise[0];
     }
@@ -35,16 +38,18 @@ class PromiseCheckService {
       List<PromiseModel> todayPromises = promises
           .where((promise) => promise.checkedAt!.isSameDay(now))
           .toList();
+
       for (var promise in todayPromises) {
-        promise.checkedAt = DateTime.now().add(const Duration(seconds: 10));
         promise.isDone = false;
-        break;
+        await promise.save();
       }
 
       if (todayPromises.isEmpty) {
         for (var promise in user.dailyPromises!) {
-          final model =
-              PromiseModel(name: promise.name, dayTime: promise.dayTime);
+          final model = PromiseModel(
+            name: promise.name,
+            dayTime: promise.dayTime,
+          );
           DateTime? checkedAt;
           switch (promise.dayTime) {
             case DayTime.morning:
@@ -57,21 +62,36 @@ class PromiseCheckService {
               break;
             case DayTime.afternoon:
               if (now.hour < 18) {
-                int from = now.hour < 15 ? 15 : now.hour;
-                checkedAt = now.add(Duration(
-                  hours: Random().nextInt(18 - from),
-                  minutes: Random().nextInt(60),
-                ));
+                DateTime baseTime =
+                    DateTime(now.year, now.month, now.day, 15, 0);
+                if (now.isBefore(baseTime)) {
+                  checkedAt = baseTime.add(Duration(
+                    hours: Random().nextInt(3),
+                    minutes: Random().nextInt(60),
+                  ));
+                } else {
+                  checkedAt = now.add(Duration(
+                    hours: Random().nextInt(18 - now.hour),
+                    minutes: Random().nextInt(60),
+                  ));
+                }
               }
               break;
             case DayTime.night:
               if (now.hour < 24) {
-                int from = now.hour < 21 ? 21 : now.hour;
-                // 현재 시간부터 24시 이전까지 랜덤으로 시간 생성
-                checkedAt = now.add(Duration(
-                  hours: Random().nextInt(24 - from),
-                  minutes: Random().nextInt(60),
-                ));
+                DateTime baseTime =
+                    DateTime(now.year, now.month, now.day, 21, 0);
+                if (now.isBefore(baseTime)) {
+                  checkedAt = baseTime.add(Duration(
+                    hours: Random().nextInt(2),
+                    minutes: Random().nextInt(60),
+                  ));
+                } else {
+                  checkedAt = now.add(Duration(
+                    hours: Random().nextInt(24 - now.hour),
+                    minutes: Random().nextInt(60),
+                  ));
+                }
               }
               break;
           }
